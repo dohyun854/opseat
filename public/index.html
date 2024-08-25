@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpSeat - 최적화된 자리 배치</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="index.css">
+  <style>
+    .fullscreen {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+</style>
+</head>
+
+<body>
+  <div class="jumbotron fullscreen">
+    <h1 class="display-4 bold-text">OpSeat - 최적화된 자리 배치</h1>
+    <p class="bold-text ">Optimized Seat Planning System
+    <br> 모두가 만족할 최적의 자리 배치
+    </p>
+
+    <form class="d-flex flex-column align-items-center" action="/main" method="get">
+        <div class="d-flex justify-content-center">
+          <input type="number" class="form-control col-sm-2 shadow" id="rows" name="rows" placeholder="행">
+          <p class="p-2">X</p>
+          <input type="number" class="form-control col-sm-2 shadow" id="columns" name="columns" placeholder="열">
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary btn-lg shadow">자리 배치하러 가기!</button>
+        </div>
+    </form>
+    <br>
+
+    <p>Developed by Dohyun Kim</p>
+  </div>
+</body>
+</html>
