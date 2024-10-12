@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,14 +37,14 @@
         }
 
         #main-container {
-            height: 80vh; /* 높이 조정 */
-            width: 50vw;  /* 너비 조정 */
+            height: 80vh;
+            width: 50vw;
             background-color: #dddddd;
         }
 
         .drop-container-wrapper {
-            height: 80vh; /* 컨테이너 높이 조정 */
-            width: 20vw;  /* 컨테이너 너비 조정 */
+            height: 80vh;
+            width: 20vw;
             background-color: #dddddd;
             box-sizing: border-box;
             display: flex;
@@ -52,26 +52,22 @@
         }
 
         .drop-container {
-            flex: 1; /* 남은 공간을 모두 차지 */
-            overflow-y: auto; /* 세로 스크롤 추가 */
+            flex: 1;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px; /* 드롭 박스 간의 간격 설정 */
+            gap: 10px;
         }
 
         .drop-row {
             display: flex;
-            gap: 10px; /* 드롭 박스 간의 간격 설정 */
+            gap: 10px;
             white-space: nowrap;
         }
 
         .drop-box {
-            flex: 1 1 calc(33.333% - 10px); /* 가로로 3개 배치 */
-            box-sizing: border-box; /* 박스 크기 계산에 패딩 포함 */
-        }
-
-        .drop-box:last-child {
-            margin-right: 0;
+            flex: 1 1 calc(33.333% - 10px);
+            box-sizing: border-box;
         }
 
         .low-container {
@@ -85,8 +81,7 @@
         <!-- 박스 컨테이너 -->
         <div class="d-flex flex-column align-items-center">
             <h3 class="display-5">자리 배치</h3>
-            <div id="main-container" class="container-lg rounded p-2 shadow">
-            </div>
+            <div id="main-container" class="container-lg rounded p-2 shadow"></div>
         </div>
         
         <!-- 드롭 박스 컨테이너 -->
@@ -94,18 +89,15 @@
             <h3 class="display-5">지망</h3>
             <div id="drop-container-wrapper" class="drop-container-wrapper rounded shadow">
                 <div id="drop-container" class="drop-container">
-
-                    <% for (let row = 0; row < rows*columns; row++) { %>
+                    <% for (let row = 0; row < rows * columns; row++) { %>
                         <div class="drop-row">
-                            <p><%=row+1%>번</p>
+                            <p><%= row + 1 %>번</p>
                             <% for (let col = 0; col < 3; col++) {
                                 const index = row * 3 + col; %>
-                                <%
-                                if (index < rows * columns * 3) {
-                                    %>
+                                <% if (index < rows * columns * 3) { %>
                                     <select class="form-control" id="drop-<%= index %>">
                                         <option value="랜덤">랜덤</option>
-                                        <% for (let i = 1; i <= rows*columns; i++) { %>
+                                        <% for (let i = 1; i <= rows * columns; i++) { %>
                                             <option value="<%= i %>"><%= i %></option>
                                         <% } %>
                                     </select>
@@ -118,7 +110,7 @@
         </div>
     </div>
 
-    <!-- 하단 컨테이너 추가 -->
+    <!-- 하단 컨테이너 -->
     <div class="low-container container d-flex flex-column align-items-center mt-3 rounded shadow">
         <select id="remove-dropdown" class="form-control w-25">
             <% for (let i = 1; i <= rows * columns; i++) { %>
@@ -132,86 +124,83 @@
         document.addEventListener('DOMContentLoaded', () => {
             const rows = <%= rows %>;
             const columns = <%= columns %>;
-    
             const mainContainer = document.getElementById('main-container');
-            mainContainer.style.position = 'relative';  // 추가된 부분
-    
+            mainContainer.style.position = 'relative';
+
             const containerWidth = mainContainer.clientWidth;
             const containerHeight = mainContainer.clientHeight;
-    
             const boxAspectRatio = 3 / 5;
             const margin = 10;
             const boxScale = 0.8;
-    
+
             const boxSizeWidth = Math.min(
                 (containerWidth - (columns - 1) * margin) / columns,
                 (containerHeight - (rows - 1) * margin) / (rows * boxAspectRatio)
             ) * boxScale;
             const boxSizeHeight = boxSizeWidth * boxAspectRatio;
-    
+
             const totalWidth = columns * boxSizeWidth + (columns - 1) * margin;
             const totalHeight = rows * boxSizeHeight + (rows - 1) * margin;
-    
+
             const offsetX = (containerWidth - totalWidth) / 2;
             const offsetY = (containerHeight - totalHeight) / 2;
-    
+
             for (let row = 0; row < rows; row++) {
                 for (let col = 0; col < columns; col++) {
                     const box = document.createElement('div');
                     box.className = 'box';
                     box.id = `box-${row}-${col}`;
-                    box.style.position = 'absolute';  // 여기 유지
                     box.style.width = `${boxSizeWidth}px`;
                     box.style.height = `${boxSizeHeight}px`;
                     box.style.left = `${offsetX + col * (boxSizeWidth + margin)}px`;
                     box.style.top = `${offsetY + row * (boxSizeHeight + margin)}px`;
-    
+
                     const boxNumber = document.createElement('div');
                     boxNumber.className = 'box-number';
                     boxNumber.textContent = row * columns + col + 1;
                     box.appendChild(boxNumber);
-    
+
                     mainContainer.appendChild(box);
                 }
             }
-    
+
             const boxes = document.querySelectorAll('.box');
-    
+
             boxes.forEach(box => {
                 let offsetX, offsetY;
-                box.style.cursor = 'grab';  // 여기 유지
+                box.style.cursor = 'grab';
+
                 box.addEventListener('mousedown', (e) => {
                     offsetX = e.clientX - box.getBoundingClientRect().left;
                     offsetY = e.clientY - box.getBoundingClientRect().top;
                     box.style.cursor = 'grabbing';
-    
+
                     const onMouseMove = (e) => {
                         const containerRect = mainContainer.getBoundingClientRect();
                         const boxRect = box.getBoundingClientRect();
-    
+
                         let left = e.clientX - containerRect.left - offsetX;
                         let top = e.clientY - containerRect.top - offsetY;
-    
+
                         // 상자가 컨테이너를 벗어나지 않도록 조정
                         left = Math.max(0, Math.min(containerRect.width - boxRect.width, left));
                         top = Math.max(0, Math.min(containerRect.height - boxRect.height, top));
-    
+
                         box.style.left = `${left}px`;
                         box.style.top = `${top}px`;
                     };
-    
+
                     const onMouseUp = () => {
                         document.removeEventListener('mousemove', onMouseMove);
                         document.removeEventListener('mouseup', onMouseUp);
                         box.style.cursor = 'grab';
                     };
-    
+
                     document.addEventListener('mousemove', onMouseMove);
                     document.addEventListener('mouseup', onMouseUp);
                 });
             });
         });
-
 
         document.getElementById('remove-button').addEventListener('click', () => {
             const selectedNumber = parseInt(document.getElementById('remove-dropdown').value);
@@ -239,8 +228,6 @@
                 optionToRemove.remove();
             }
         });
-
     </script>
-    
 </body>
 </html>
