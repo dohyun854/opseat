@@ -1,4 +1,5 @@
 # OpSeat - 최적화된 자리 배치
+## [https://opseat.kro.kr](https://opseat.kro.kr)
 Optimized Seat Planning System <br>
 Simulated Annealing 최적화 기반 <br>
 모두가 만족할 최적의 자리 배치 <br>
