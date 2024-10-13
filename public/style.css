@@ -17,10 +17,9 @@ body {
 .box-number {
     font-size: 20px;
     color: #ffffff;
-
-    position: absolute; /* 절대 위치로 설정 */
-    top: 0; /* 상단에 배치 */
-    left: 0; /* 좌측에 배치 */
+    position: absolute;
+    top: 0;
+    left: 0;
     margin: 5px;
 }
 

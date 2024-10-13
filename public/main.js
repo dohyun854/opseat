@@ -68,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 let left = e.clientX - containerRect.left - offsetX;
                 let top = e.clientY - containerRect.top - offsetY;
 
-                // 상자가 컨테이너를 벗어나지 않도록 조정
                 left = Math.max(0, Math.min(containerRect.width - boxRect.width, left));
                 top = Math.max(0, Math.min(containerRect.height - boxRect.height, top));
 
@@ -148,13 +147,11 @@ function getDistance(box1, box2) {
     const box1Rect = box1.getBoundingClientRect();
     const box2Rect = box2.getBoundingClientRect();
 
-    // 박스의 중심 좌표를 구함
     const box1CenterX = box1Rect.left + box1Rect.width / 2;
     const box1CenterY = box1Rect.top + box1Rect.height / 2;
     const box2CenterX = box2Rect.left + box2Rect.width / 2;
     const box2CenterY = box2Rect.top + box2Rect.height / 2;
 
-    // 두 박스의 중심 좌표 간의 거리 계산
     const distance = Math.sqrt(
         Math.pow(box2CenterX - box1CenterX, 2) + 
         Math.pow(box2CenterY - box1CenterY, 2)
@@ -164,12 +161,12 @@ function getDistance(box1, box2) {
 }
 
 function getDropdownValues() {
-    const dropdowns = document.querySelectorAll('#drop-container select'); // 드롭다운 선택
+    const dropdowns = document.querySelectorAll('#drop-container select');
     const values = [];
     const group = [];
 
     dropdowns.forEach(dropdown => {
-        values.push(dropdown.value); // 각 드롭다운의 값을 배열에 추가
+        values.push(dropdown.value);
     });
 
     for (let i = 0; i < values.length; i++) {
@@ -183,7 +180,7 @@ function getDropdownValues() {
 
     const groupedValues = [];
     for (let i = 0; i < values.length; i += 3) {
-        groupedValues.push(values.slice(i, i + 3)); // 세 개씩 잘라서 추가
+        groupedValues.push(values.slice(i, i + 3));
     }
 
     return groupedValues;
@@ -240,7 +237,7 @@ function solveProblem(n, Selections) {
     let lp = {
         name: 'Minimise the sum of weighted distances',
         objective: {
-            direction: glpk.GLP_MIN, // minimise
+            direction: glpk.GLP_MIN,
             name: 'distanceSum',
             vars: []
         },
@@ -297,15 +294,12 @@ document.getElementById('start').addEventListener('click', function() {
     console.log(dropdownValues);
     
     const { bestX, bestVal } = simulatedAnnealing(boxes.length, boxes, dropdownValues);
-    console.log(bestX); // bestX 값을 콘솔에 출력합니다.
+    console.log(bestX);
     
-    // 박스에 bestX 값을 표시하기
     bestX.forEach((value, index) => {
         const box = document.getElementById(`box-${Math.floor((value) / columns)}-${(value) % columns}`);
         const boxNumberElement = box.querySelector('.box-number');
-
-        // bestX의 인덱스에 따라 박스에 1, 2, 3, ... 을 표시
-        boxNumberElement.textContent = index + 1; // 인덱스에 1을 더해 값 설정
+        boxNumberElement.textContent = index + 1;
     });
 });
 
