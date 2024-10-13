@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpSeat - 최적의 자리 배치</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/font.css">
     <link rel="stylesheet" href="/style.css">
 </head>
@@ -16,7 +17,7 @@
         <div class="d-flex flex-column align-items-center">
             
             <div id="main-container" class="container-lg rounded p-2 shadow d-flex flex-column align-items-center">
-                <h3 class="display-5 mt-2">자리 배치</h3>
+                <h3 class="display-7 mt-2">자리 배치</h3>
             </div>
         </div>
         
@@ -24,7 +25,7 @@
         <div class="d-flex flex-column align-items-center ml-3">
             
             <div id="drop-container-wrapper" class="drop-container-wrapper rounded shadow d-flex flex-column align-items-center">
-                <h3 class="display-5 mt-2">지망</h3>
+                <h3 class="display-7 mt-2">지망</h3>
                 <div id="drop-container" class="drop-container w-100">
                     <% for (let row = 0; row < rows * columns; row++) { %>
                         <div class="drop-row">
@@ -32,7 +33,7 @@
                             <% for (let col = 0; col < 3; col++) {
                                 const index = row * 3 + col; %>
                                 <% if (index < rows * columns * 3) { %>
-                                    <select class="form-control" id="drop-<%= index %>">
+                                    <select class="form-select" id="drop-<%= index %>">
                                         <option value="랜덤">랜덤</option>
                                         <% for (let i = 1; i <= rows * columns; i++) { %>
                                             <option value="<%= i %>"><%= i %></option>
@@ -53,22 +54,37 @@
         <!--low container left-->
         <div class="low-container-left align-items-center d-flex flex-column justify-content-center mt-3 mb-4 rounded shadow">
             <h5 class="mt-2">자리 제거</h5>
-            <select id="remove-dropdown" class="form-control">
+            <select id="remove-dropdown" class="form-select" data-bs-toggle="dropdown">
                 <% for (let i = 1; i <= rows * columns; i++) { %>
                     <option value="<%= i %>"><%= i %></option>
                 <% } %>
             </select>
-            <button id="remove-button" class="btn btn-danger mt-2 mb-2">제거</button>
+            <button id="remove-button" class="btn btn-danger mt-2 mb-2 shadow">제거</button>
         </div>
     
         <!--low container right-->
         <div class="low-container-right align-items-center d-flex justify-content-center mt-3 mb-4 rounded shadow ml-3">
-            <button id="start" class="btn btn-primary btn-lg">자리 배치!</button>
+            <button id="start" class="btn btn-primary btn-lg shadow">자리 배치!</button>
         </div>
     
     </div>
-    
 
+    <!--toast-->
+    <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="remove-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img src="..." class="rounded me-2 shadow" alt="...">
+            <strong class="me-auto">안내</strong>
+            <small class="text-body-secondary">just now</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            자리 제거 기능은 아직 준비 중입니다...! 조금만 기다려주세요! 😊
+          </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="/main.js"></script>
 </body>
 </html>

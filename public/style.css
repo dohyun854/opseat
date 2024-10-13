@@ -5,7 +5,7 @@ body {
 .box {
     position: absolute;
     background-color: #0d6dfd81;
-    border: 2px solid #000;
+    border: 2px solid #777777;
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -16,7 +16,12 @@ body {
 
 .box-number {
     font-size: 20px;
-    color: #000;
+    color: #ffffff;
+
+    position: absolute; /* 절대 위치로 설정 */
+    top: 0; /* 상단에 배치 */
+    left: 0; /* 좌측에 배치 */
+    margin: 5px;
 }
 
 .drop-box {

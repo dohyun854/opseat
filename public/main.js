@@ -1,10 +1,15 @@
+let boxList = [];
+let rows, columns;
+
 // initial box set up
 
 document.addEventListener('DOMContentLoaded', () => {
     let searchParams = new URLSearchParams(window.location.search)
 
-    const rows = searchParams.get('rows');
-    const columns = searchParams.get('columns');
+    rows = searchParams.get('rows');
+    columns = searchParams.get('columns');
+    boxList = Array.from({ length: rows*columns }, (_, i) => i + 1);
+
     const mainContainer = document.getElementById('main-container');
     mainContainer.style.position = 'relative';
 
@@ -29,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < columns; col++) {
             const box = document.createElement('div');
-            box.className = 'box';
+            box.className = 'box shadow';
             box.id = `box-${row}-${col}`;
             box.style.width = `${boxSizeWidth}px`;
             box.style.height = `${boxSizeHeight}px`;
@@ -87,29 +92,52 @@ document.addEventListener('DOMContentLoaded', () => {
 // removing boxes
 
 document.getElementById('remove-button').addEventListener('click', () => {
-    const selectedNumber = parseInt(document.getElementById('remove-dropdown').value);
+    // const selectedNumber = parseInt(document.getElementById('remove-dropdown').value);
 
-    // 선택된 번호에 해당하는 상자 제거
-    const boxes = document.querySelectorAll('.box');
-    boxes.forEach(box => {
-        const boxNumberElement = box.querySelector('.box-number');
-        if (boxNumberElement && parseInt(boxNumberElement.textContent) === selectedNumber) {
-            box.remove();
-        }
-    });
+    // // remove from the list
+    // boxList.splice(selectedNumber-1, 1);
 
-    // 마지막 드롭다운 행 제거
-    const dropRows = document.querySelectorAll('#drop-container .drop-row');
-    const lastDropRow = dropRows[dropRows.length - 1];
-    if (lastDropRow) {
-        lastDropRow.remove();
-    }
+    // // remove the box
+    // const boxes = document.querySelectorAll('.box');
+    // boxes.forEach(box => {
+    //     const boxNumberElement = box.querySelector('.box-number');
+    //     if (boxNumberElement && parseInt(boxNumberElement.textContent) === selectedNumber) {
+    //         box.remove();
+    //     }
+    // });
 
-    // 드롭다운에서 해당 번호 제거
-    const removeDropdown = document.getElementById('remove-dropdown');
-    const optionToRemove = removeDropdown.querySelector(`option[value="${selectedNumber}"]`);
-    if (optionToRemove) {
-        optionToRemove.remove();
+    // // remove last dropdown selection row
+    // const dropRows = document.querySelectorAll('#drop-container .drop-row');
+    // const lastDropRow = dropRows[dropRows.length - 1];
+    // if (lastDropRow) {
+    //     lastDropRow.remove();
+    // }
+    
+    // // remove from the remove selection
+    // const removeDropdown = document.getElementById('remove-dropdown');
+    // const optionToRemove = removeDropdown.querySelector(`option[value="${selectedNumber}"]`);
+    // if (optionToRemove) {
+    //     optionToRemove.remove();
+    // }
+
+    // // remove from the selection dropdown
+    // const dropdowns = document.querySelectorAll('.drop-container select'); // 모든 드롭다운 선택
+    // dropdowns.forEach(dropdown => {
+    //     const options = dropdown.options; // 현재 드롭다운의 모든 옵션 가져오기
+    //     for (let i = options.length - 1; i >= 0; i--) { // 뒤에서부터 순회
+    //         if (parseInt(options[i].value) === selectedNumber) {
+    //             dropdown.remove(i); // 해당 옵션 제거
+    //         }
+    //     }
+    // });
+    
+    // show toast
+    const toastEl = document.getElementById('remove-toast');
+    if (toastEl) { // toastEl가 존재하는지 확인
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show(); // 토스트 표시
+    } else {
+        console.error("토스트 요소를 찾을 수 없습니다.");
     }
 });
 
@@ -135,8 +163,78 @@ function getDistance(box1, box2) {
     return distance;
 }
 
-const glpk = require('glpk.js');
+function getDropdownValues() {
+    const dropdowns = document.querySelectorAll('#drop-container select'); // 드롭다운 선택
+    const values = [];
+    const group = [];
 
+    dropdowns.forEach(dropdown => {
+        values.push(dropdown.value); // 각 드롭다운의 값을 배열에 추가
+    });
+
+    for (let i = 0; i < values.length; i++) {
+        if (values[i] == '랜덤') {
+            const randomIndex = Math.floor(Math.random() * boxList.length);
+            const randomElement = boxList[randomIndex];
+            values[i] = String(randomElement);
+        }
+        values[i] = parseInt(values[i], 10);
+    }
+
+    const groupedValues = [];
+    for (let i = 0; i < values.length; i += 3) {
+        groupedValues.push(values.slice(i, i + 3)); // 세 개씩 잘라서 추가
+    }
+
+    return groupedValues;
+}
+
+function simulatedAnnealing(n, seats, selections, maxIter=10000, initialTemp=100, coolingRate=0.99) {
+    let x = Array.from({length: n}, (_, i) => i);
+
+    function objective(x) {
+        let sum=0;
+        for (let i=0; i<n; i++) {
+            sum += 3*getDistance(seats[x[i]], seats[selections[i][0]-1]) + 2*getDistance(seats[x[i]], seats[selections[i][1]-1]) + getDistance(seats[x[i]], seats[selections[i][2]-1]);
+        }
+        return sum;
+    }
+
+    function getNeighbor(x) {
+        let newX = [...x];
+        let i = Math.floor(Math.random()*n);
+        let j = Math.floor(Math.random()*n);
+        [newX[i], newX[j]] = [newX[j], newX[i]];
+        return newX;
+    }
+
+    let currentX = x;
+    let currentVal = objective(currentX);
+    let bestX = [...currentX];
+    let bestVal = currentVal;
+
+    let T = initialTemp
+
+    for (let iter = 0; iter<maxIter; iter++) {
+        let newX = getNeighbor(currentX);
+        let newVal = objective(newX);
+
+        if (newVal < currentVal || Math.random < Math.exp((currentVal - newVal)/T)) {
+            currentX = newX;
+            currentVal = newVal;
+            if (currentVal < bestVal) {
+                bestX = [...currentX];
+                bestVal = currentVal;
+                console.log(bestVal);
+            }
+        }
+        T*=coolingRate;
+        if (T<1e-8) break;
+    }
+    return {bestX, bestVal};
+}
+
+// FUCKED ONE
 function solveProblem(n, Selections) {
     // initializing variables
     let lp = {
@@ -156,7 +254,7 @@ function solveProblem(n, Selections) {
         lp.objective.vars.push({name: 'd_${i}_2', coef: 2});
         lp.objective.vars.push({name: 'd_${i}_3', coef: 1});
 
-        let d1 = getDistance(boxes[i], Selections[i][0]);
+        let d1 = getDistance(boxes[i], boxes[Selections[i][0]]);
         let d2 = getDistance(boxes[i], Selections[i][1]);
         let d3 = getDistance(boxes[i], Selections[i][2]);
 
@@ -194,5 +292,21 @@ function solveProblem(n, Selections) {
 
 document.getElementById('start').addEventListener('click', function() {
     const boxes = document.querySelectorAll('.box');
-    console.log(getDistance(boxes[1], boxes[2]));
-})
+
+    const dropdownValues = getDropdownValues();
+    console.log(dropdownValues);
+    
+    const { bestX, bestVal } = simulatedAnnealing(boxes.length, boxes, dropdownValues);
+    console.log(bestX); // bestX 값을 콘솔에 출력합니다.
+    
+    // 박스에 bestX 값을 표시하기
+    bestX.forEach((value, index) => {
+        const box = document.getElementById(`box-${Math.floor((value) / columns)}-${(value) % columns}`);
+        const boxNumberElement = box.querySelector('.box-number');
+
+        // bestX의 인덱스에 따라 박스에 1, 2, 3, ... 을 표시
+        boxNumberElement.textContent = index + 1; // 인덱스에 1을 더해 값 설정
+    });
+});
+
+
