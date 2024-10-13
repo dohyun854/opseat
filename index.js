@@ -20,7 +20,7 @@ app.get('/main', (req, res) => {
     res.render('main', { rows, columns });
 });
 
-// 서버 시작
-app.listen(8080, '0.0.0.0', () => {
-    console.log('listening on 8080');
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
 });
