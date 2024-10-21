@@ -32,7 +32,7 @@ $$
 - $x_{i}\in S$
 
 ### 2. Simulated Annealing (담금질 기법)
-먼저, Simulated Annealing은 목적 함수의 전역 최적해(함수의 최대, 최소)를 찾는 최적화 기법이다. Simulated Annealing에서는 최대 온도(시작 온도)와 최소 온도라는 것을 설정하여 실행시킨다, 온도는 시간이 지남에 따라 점점 감소하고, 온도가 낮아질 수록 '해 탐색 정도'가 줄어드는 방식으로 최적해(에너지의 최대 또는 최소)를 찾아낸다 (말로 표현하기 어려움으로 의사코드를 참고하기 바란다).
+먼저, Simulated Annealing은 목적 함수의 전역 최적해(함수의 최대, 최소)를 찾는 최적화 기법이다. Simulated Annealing에서는 '최대 온도(시작 온도)'와 '최소 온도'라는 것을 설정하여 실행시킨다. 온도는 시간이 지남에 따라 점점 감소하고, 온도가 낮아질 수록 '해 탐색 정도'가 줄어드는 방식으로 최적해(에너지의 최대 또는 최소)를 찾아낸다 (말로 표현하기 어려우므로 의사코드와 참고 영상을 참고하기 바란다).
 #### 의사 코드 (Pseudocode)
 ```
 algorithm SimulatedAnnealingOptimizer(T_max, T_min, E_th, α):
@@ -66,7 +66,7 @@ algorithm SimulatedAnnealingOptimizer(T_max, T_min, E_th, α):
 [이 영상](https://youtu.be/eBmU1ONJ-os)에서 Simulated Annealing에 대해 잘 설명하고 있다.
 
 ### 3. 적용
-(코드 해석은 귀찮아서 아직 작성하지 않고 있다...)
+(코드 해석은 작성할 예정이다)
 ```
 function simulatedAnnealing(n, seats, selections, maxIter=10000, initialTemp=100, coolingRate=0.99) {
     let x = Array.from({length: n}, (_, i) => i);
