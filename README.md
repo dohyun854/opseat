@@ -7,7 +7,7 @@ Simulated Annealing 최적화 기반 <br>
 모두가 만족할 최적의 자리 배치 <br>
 Developed by Dohyun Kim
 ## 특징
-- OpSeat은 임의로 자리를 배치하는 타 프로그램들과 달리 [Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing) (SA, 담금질 기법) 최적화 알고리즘을 사용합니다. 학생들이 1, 2, 3지망의 자리를 선택하면 SA를 기반으로 모두가 만족할 수 있는 자리를 배정해줍니다.
+- OpSeat은 임의로 자리를 배치하는 타 프로그램들과 달리 [Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing) (SA, 담금질 기법) 최적화 알고리즘을 사용합니다. 학생들이 1, 2, 3지망의 자리를 선택하면 자리 각각의 거리를 계산하여 SA를 기반으로 모두가 만족할 수 있는 자리를 배정해줍니다.
 - n×m 형식의 고정된 자리가 아니라, 자리를 드래그해서 위치를 자유롭게 조절할 수 있습니다.
 ## 스크린샷
 
@@ -66,53 +66,78 @@ algorithm SimulatedAnnealingOptimizer(T_max, T_min, E_th, α):
 [이 영상](https://youtu.be/eBmU1ONJ-os)에서 Simulated Annealing에 대해 잘 설명하고 있다.
 
 ### 3. 적용
-(코드 해석은 작성할 예정이다)
-```
-function simulatedAnnealing(n, seats, selections, maxIter=10000, initialTemp=100, coolingRate=0.99) {
-    let x = Array.from({length: n}, (_, i) => i);
 
-    function objective(x) {
-        let sum=0;
-        for (let i=0; i<n; i++) {
-            sum += 3*getDistance(seats[x[i]], seats[selections[i][0]-1]) + 2*getDistance(seats[x[i]], seats[selections[i][1]-1]) + getDistance(seats[x[i]], seats[selections[i][2]-1]);
-        }
-        return sum;
-    }
 
-    function getNeighbor(x) {
-        let newX = [...x];
-        let i = Math.floor(Math.random()*n);
-        let j = Math.floor(Math.random()*n);
-        [newX[i], newX[j]] = [newX[j], newX[i]];
-        return newX;
-    }
+<table class="tg"><thead>
+  <tr>
+    <th class="tg-n9g5">코드</th>
+    <th class="tg-0pky">설명</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-n9g5"><code>function simulatedAnnealing(n, seats, selections, maxIter=10000, initialTemp=100, coolingRate=0.99) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;let x = Array.from({length: n}, (_, i) => i);<br></code></td>
+    <td class="tg-0pky">Simulated Annealing 함수를 정의한다.<br>[매개변수]<br>n: 자리 개수<br>seats: 자리 리스트<br>selections: 지망 배열(Array)<br>maxIter: 최대 반복 횟수(기본값: 10000)<br>initialTemp: 초기 온도(기본값: 100)<br>coolingRate: 냉각 속도(기본값: 0.99)</td>
+  </tr>
+  <tr>
+    <td class="tg-n9g5"><code>function objective(x) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;let sum=0;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;for (let i=0; i&lt;n; i++) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sum += 3*getDistance(seats[x[i]], seats[selections[i][0]-1]) + 2*getDistance(seats[x[i]], seats[selections[i][1]-1]) + getDistance(seats[x[i]], seats[selections[i][2]-1]);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;return sum;<br>
+    }</code></td>
+    <td class="tg-0pky">목적 함수(Objective Function)를 정의한다.</td>
+  </tr>
+  <tr>
+    <td class="tg-n9g5"><code>function getNeighbor(x) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;let newX = [...x];<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;let i = Math.floor(Math.random()*n);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;let j = Math.floor(Math.random()*n);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;[newX[i], newX[j]] = [newX[j], newX[i]];<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;return newX;<br>
+    }</code></td>
+    <td class="tg-0pky">임의로 두 자리를 바꾸는 함수를 정의한다.</td>
+  </tr>
+  <tr>
+    <td class="tg-n9g5"><code>let currentX = x;<br>
+    let currentVal = objective(currentX);<br>
+    let bestX = [...currentX];<br>
+    let bestVal = currentVal;<br>
+    let T = initialTemp;</code></td>
+    <td class="tg-0pky">Simulated Annealing을 위한 변수를 정의한다.</td>
+  </tr>
+  <tr>
+    <td class="tg-n9g5"><code>for (let iter = 0; iter &lt; maxIter; iter++) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;let newX = getNeighbor(currentX);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;let newVal = objective(newX);<br></code></td>
+    <td class="tg-0pky">maxIter만큼 알고리즘을 반복한다:</td>
+  </tr>
+  <tr>
+    <td class="tg-n9g5"><code>if (newVal &lt; currentVal || Math.random() &lt; Math.exp((currentVal - newVal)/T)) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentX = newX;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentVal = newVal;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (currentVal &lt; bestVal) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bestX = [...currentX];<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bestVal = currentVal;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(bestVal);<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+    }</code></td>
+    <td class="tg-0pky">새 목적함수의 값(newVal)이 원래 목적함수의 값(currentVal)보다 작거나 [0,1] 범위의 임의의 수가 exp((현재온도-새온도)/T)보다 작다면 값을 업데이트한다.<br>Simulated Annealing의 특징인 확률적인 부분이 가미되어 있다.<br>새 값을 현재 값으로 업데이트하고, 현재 함숫값이 원래 최저값(bestVal)보다 작다면 최저값을 업데이트한다.</td>
+  </tr>
+  <tr>
+    <td class="tg-n9g5"><code>T *= coolingRate;<br>
+    if (T &lt; 1e-8) break;<br>
+    }<br>
+    return {bestX, bestVal};<br>
+    }</code></td>
+    <td class="tg-0pky">루프를 돌 때마다 온도를 감소시키고, 온도가 1e-8 미만이면 루프를 빠져나온다.</td>
+  </tr>
+</tbody>
+</table>
+(들여쓰기가 잘 반영되어 있지 않으므로 코드 원본을 참고)
 
-    let currentX = x;
-    let currentVal = objective(currentX);
-    let bestX = [...currentX];
-    let bestVal = currentVal;
-
-    let T = initialTemp
-
-    for (let iter = 0; iter<maxIter; iter++) {
-        let newX = getNeighbor(currentX);
-        let newVal = objective(newX);
-
-        if (newVal < currentVal || Math.random < Math.exp((currentVal - newVal)/T)) {
-            currentX = newX;
-            currentVal = newVal;
-            if (currentVal < bestVal) {
-                bestX = [...currentX];
-                bestVal = currentVal;
-                console.log(bestVal);
-            }
-        }
-        T*=coolingRate;
-        if (T<1e-8) break;
-    }
-    return {bestX, bestVal};
-}
-```
     
 
 ## 로드맵
