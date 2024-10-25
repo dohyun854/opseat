@@ -7,7 +7,7 @@ Simulated Annealing 최적화 기반 <br>
 모두가 만족할 최적의 자리 배치 <br>
 Developed by Dohyun Kim
 ## 특징
-- OpSeat은 임의로 자리를 배치하는 타 프로그램들과 달리 [Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing) (SA, 담금질 기법) 최적화 알고리즘을 사용합니다. 학생들이 1, 2, 3지망의 자리를 선택하면 자리 각각의 거리를 계산하여 SA를 기반으로 모두가 만족할 수 있는 자리를 배정해줍니다.
+- OpSeat은 임의로 자리를 배치하는 타 프로그램들과 달리 [Simulated Annealing](https://en.wikipedia.org/wiki/Simulated_annealing) (SA, 담금질 기법) 최적화 알고리즘을 사용합니다. 학생들이 1, 2, 3지망의 자리를 선택하면 자리 각각의 거리를 계산하여 SA를 기반으로 모두가 만족할 수 있는, 희망하는 자리와 최대한 가까운 자리를 배정해줍니다.
 - n×m 형식의 고정된 자리가 아니라, 자리를 드래그해서 위치를 자유롭게 조절할 수 있습니다.
 ## 스크린샷
 
