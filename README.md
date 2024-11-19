@@ -141,7 +141,7 @@ algorithm SimulatedAnnealingOptimizer(T_max, T_min, E_th, α):
     
 
 ## 로드맵
-
+- 선생님의 의사 반영 (예: 시끄럽게 떠드는 친구들을 떨어뜨려 놓는다.)
 - 자리 제거 기능 (진행 중)
 - 교탁/칠판 추가
 - 다크 모드 지원
