@@ -231,7 +231,7 @@ function simulatedAnnealing(n, seats, selections, maxIter=10000, initialTemp=100
     return {bestX, bestVal};
 }
 
-// FUCKED ONE
+// arch
 function solveProblem(n, Selections) {
     // initializing variables
     let lp = {
