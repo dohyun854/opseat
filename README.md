@@ -146,7 +146,3 @@ algorithm SimulatedAnnealingOptimizer(T_max, T_min, E_th, α):
 - 다크 모드 지원
 - 지망 개수 변경 기능
 - 다양한 최적화 알고리즘 추가 적용
-
-## 라이선스
-[MIT](https://choosealicense.com/licenses/mit/)
-
