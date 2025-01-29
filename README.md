@@ -19,12 +19,13 @@ Simulated Annealing 최적화 기반 <br>
 ### 1. 최적화 문제 정의
 #### 변수, 함수 정의
 - $d(x, y)$: 자리 $x$와 자리 $y$ 사이의 거리
+- $c$: 지망 수
 - $x_{i}$: $i$번 학생의 자리 (결정 변수, Decision Variable)
 - $x_{ij}$: $i$번 학생의 $j$지망 자리
 - $S$: 자리의 전체 집합
 #### 목적 함수 (Objective Function)
 $$
-\underset{x_{i}\in S }{\min}\sum_{i}^{} 3d(x_{i},x_{i1})+2d(x_{i},x_{i2})+d(x_{i},x_{i3})
+\underset{x_{i}\in S }{\min}\sum_{i}^{}\sum_{j=1}^{c} (c-j+1)d(x_{i},x_{ij})
 $$
 #### 제약 조건 (Constraint)
 - $\forall i,j(i\not=j ), x_{i}\not=x_{j}$: 모든 $i$와 $j$ ($i\not=j$)에 대해서 $x_{i}\not=x_{j}$
@@ -92,11 +93,13 @@ algorithm SimulatedAnnealingOptimizer(T_max, T_min, E_th, α):
   </tr>
   <tr>
     <td class="tg-n9g5"><code>function objective(x) {<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;let sum=0;<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;for (let i=0; i&lt;n; i++) {<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sum += 3*getDistance(seats[x[i]], seats[selections[i][0]-1]) + 2*getDistance(seats[x[i]], seats[selections[i][1]-1]) + getDistance(seats[x[i]], seats[selections[i][2]-1]);<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;return sum;<br>
+    &nbsp;&nbsp;let sum=0;<br>
+    &nbsp;&nbsp;for (let i=0; i<n; i++) {<br>
+    &nbsp;&nbsp;&nbsp;for (let j=0; j<choices; j++) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;sum += (choices-j)*getDistance(seats[x[i]], seats[selections[i][j]-1]);<br>
+    &nbsp;&nbsp;&nbsp;}<br>
+    &nbsp;&nbsp;}<br>
+    &nbsp;&nbsp;return sum;<br>
     }</code></td>
     <td class="tg-0pky">목적 함수(Objective Function)를 정의한다.</td>
   </tr>
@@ -155,5 +158,5 @@ algorithm SimulatedAnnealingOptimizer(T_max, T_min, E_th, α):
 - 자리 제거 기능 (진행 중)
 - 교탁/칠판 추가
 - 다크 모드 지원
-- 지망 개수 변경 기능
+- 지망 개수 변경 기능 - 2025.01.29 추가 완료
 - 다양한 최적화 알고리즘 추가 적용
