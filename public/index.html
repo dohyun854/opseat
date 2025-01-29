@@ -29,9 +29,7 @@
 <body>
   <div class="jumbotron fullscreen">
     <h1 class="display-4 bold-text">OpSeat - 최적화된 자리 배치</h1>
-    <p class="bold-text">Optimized Seat Planning System
-    <br> Simulated Annealing 최적화 기반
-    <br> 모두가 만족할 최적의 자리 배치
+    <p class="bold-text">Optimized Seat Planning System | Simulated Annealing 최적화 기반
     </p>
 
     <form class="d-flex flex-column align-items-center" action="/main" method="get">
@@ -40,13 +38,18 @@
           <p class="p-2">X</p>
           <input type="number" class="form-control col-sm-2 shadow" id="columns" name="columns" placeholder="열">
         </div>
+        <div class="d-flex justify-content-center">
+          <p class="p-2">지망 수: </p>
+          <input type="number" class="form-control col-sm-3 shadow" id="choices" name="choices" placeholder="">
+        </div>
         <div>
           <button type="submit" class="btn btn-primary btn-lg shadow">자리 배치하러 가기!</button>
         </div>
     </form>
-    <br>    
-    <p class="mb-1">Developed by Dohyun Kim</p>
-    <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='https://github.com/dohyun854/opseat';">Github Repository 확인하기</button>
-  </div>
+
+    <nav class="navbar fixed-bottom bg-body-tertiary"> 
+      <p class="mb-1">Developed by Dohyun Kim</p>
+      <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='https://github.com/dohyun854/opseat';">Github Repository 확인하기</button>
+    </nav>
 </body>
 </html>

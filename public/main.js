@@ -132,9 +132,9 @@ document.getElementById('remove-button').addEventListener('click', () => {
     
     // show toast
     const toastEl = document.getElementById('remove-toast');
-    if (toastEl) { // toastEl가 존재하는지 확인
+    if (toastEl) {
         const toast = new bootstrap.Toast(toastEl);
-        toast.show(); // 토스트 표시
+        toast.show();
     } else {
         console.error("토스트 요소를 찾을 수 없습니다.");
     }
@@ -179,20 +179,24 @@ function getDropdownValues() {
     }
 
     const groupedValues = [];
-    for (let i = 0; i < values.length; i += 3) {
-        groupedValues.push(values.slice(i, i + 3));
+    for (let i = 0; i < values.length; i += choices) {
+        groupedValues.push(values.slice(i, i + choices));
     }
 
     return groupedValues;
 }
 
+
 function simulatedAnnealing(n, seats, selections, maxIter=10000, initialTemp=100, coolingRate=0.99) {
     let x = Array.from({length: n}, (_, i) => i);
+    let choices = selections[0].length
 
     function objective(x) {
         let sum=0;
         for (let i=0; i<n; i++) {
-            sum += 3*getDistance(seats[x[i]], seats[selections[i][0]-1]) + 2*getDistance(seats[x[i]], seats[selections[i][1]-1]) + getDistance(seats[x[i]], seats[selections[i][2]-1]);
+            for (let j=0; j<choices; j++) {
+                sum += (choices-j)*getDistance(seats[x[i]], seats[selections[i][j]-1]);
+            }
         }
         return sum;
     }
@@ -231,7 +235,7 @@ function simulatedAnnealing(n, seats, selections, maxIter=10000, initialTemp=100
     return {bestX, bestVal};
 }
 
-// FUCKED ONE
+// trash
 function solveProblem(n, Selections) {
     // initializing variables
     let lp = {

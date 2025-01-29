@@ -62,6 +62,12 @@ body {
     display: flex;
     gap: 10px;
     white-space: nowrap;
+    max-width: 100%;
+
+}
+
+.form-select {
+    min-width: 100px;
 }
 
 .drop-box {

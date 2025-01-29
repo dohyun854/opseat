@@ -13,7 +13,8 @@ app.get('/', (req, res) => {
 app.get('/main', (req, res) => {
     const rows = parseInt(req.query.rows) || 5;
     const columns = parseInt(req.query.columns) || 5;
-    res.render('main', { rows, columns });
+    const choices = parseInt(req.query.choices) || 3;
+    res.render('main', { rows, columns, choices });
 });
 
 const port = process.env.PORT || 8080;

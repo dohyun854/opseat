@@ -21,46 +21,53 @@
     <h3 class="display-7 bold-text">OpSeat - 최적화된 자리 배치</h3>
     <div class="container-fluid d-flex flex-row justify-content-center align-items-center">
 
-        <!-- main container -->
         <div class="d-flex flex-column align-items-center">
-            
             <div id="main-container" class="container-lg rounded p-2 shadow d-flex flex-column align-items-center">
                 <h3 class="display-7 mt-2">자리 배치</h3>
             </div>
         </div>
         
-        <!-- dropbox container -->
         <div class="d-flex flex-column align-items-center ms-3">
-            
             <div id="drop-container-wrapper" class="drop-container-wrapper rounded shadow d-flex flex-column align-items-center">
                 <h3 class="display-7 mt-2">지망</h3>
-                <div id="drop-container" class="drop-container w-100">
-                    <% for (let row = 0; row < rows * columns; row++) { %>
-                        <div class="drop-row">
-                            <p><%= row + 1 %>번</p>
-                            <% for (let col = 0; col < 3; col++) {
-                                const index = row * 3 + col; %>
-                                <% if (index < rows * columns * 3) { %>
-                                    <select class="form-select" id="drop-<%= index %>">
-                                        <option value="랜덤">랜덤</option>
-                                        <% for (let i = 1; i <= rows * columns; i++) { %>
-                                            <option value="<%= i %>"><%= i %></option>
-                                        <% } %>
-                                    </select>
+                <div id="drop-container" class="table-responsive overflow-auto w-100">
+                    <table class="table-secondary table-sm text-center">
+                        <thead>
+                            <tr>
+                                <th style="min-width: 40px;">번호</th>
+                                <% for (let col = 0; col < choices; col++) { %>
+                                    <th><%= col + 1 %>지망</th>
                                 <% } %>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (let row = 0; row < rows * columns; row++) { %>
+                                <tr>
+                                    <td style="min-width: 40px;"><%= row + 1 %>번</td>
+                                    <% for (let col = 0; col < choices; col++) { %>
+                                        <td>
+                                            <select class="form-select" id="drop-<%= row * choices + col %>">
+                                                <option value="랜덤">랜덤</option>
+                                                <% for (let i = 1; i <= rows * columns; i++) { %>
+                                                    <option value="<%= i %>"><%= i %></option>
+                                                <% } %>
+                                            </select>
+                                        </td>
+                                    <% } %>
+                                </tr>
                             <% } %>
-                        </div>
-                    <% } %>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+        
+        
 
     </div>
 
     <div class="container-fluid d-flex flex-row justify-content-center align-items-center">
-        <!--low container left-->
         <div class="low-container-left row d-flex justify-content-center flex-column mt-3 mb-4 rounded shadow">
-
             <div class="align-items-center d-flex flex-column col-8">
                 <h5 class="mt-2">자리 제거</h5>
                 <select id="remove-dropdown" class="form-select" data-bs-toggle="dropdown">
@@ -74,17 +81,13 @@
             <div class="col-4">
                 <button onClick="window.location.reload()" class="btn btn-success mt-2 mb-2 shadow">초기화</button>
             </div>
-            
         </div>
     
-        <!--low container right-->
         <div class="low-container-right align-items-center justify-content-center d-flex mt-3 mb-4 rounded shadow ms-4">
             <button id="start" class="btn btn-primary btn-lg shadow">자리 배치!</button>
         </div>
-    
     </div>
 
-    <!--toast-->
     <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3">
         <div id="remove-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
           <div class="toast-header">
@@ -99,6 +102,9 @@
         </div>
     </div>
     
+    <script>
+        const choices = <%= choices %>;
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="/main.js"></script>
 </body>
