@@ -107,9 +107,7 @@ document.getElementById('blackboard-checkbox').addEventListener('click', () => {
     }
 })
 
-
 // removing boxes
-
 document.getElementById('remove-button').addEventListener('click', () => {
     // const selectedNumber = parseInt(document.getElementById('remove-dropdown').value);
 
