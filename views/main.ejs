@@ -67,21 +67,58 @@
     </div>
 
     <div class="container-fluid d-flex flex-row justify-content-center align-items-center">
-        <div class="low-container-left row d-flex justify-content-center flex-column mt-3 mb-4 rounded shadow">
-            <div class="align-items-center d-flex flex-column col-8">
-                <h5 class="mt-2">자리 제거</h5>
-                <select id="remove-dropdown" class="form-select" data-bs-toggle="dropdown">
-                    <% for (let i = 1; i <= rows * columns; i++) { %>
-                        <option value="<%= i %>"><%= i %></option>
-                    <% } %>
-                </select>
-                <button id="remove-button" class="btn btn-danger mt-2 mb-2 shadow">제거</button>
+        <div class="low-container-left row d-flex justify-content-center mt-3 mb-4 rounded shadow">
+            <div class="col-12 col-md-4 d-flex p-2">
+                <div class="card card-bg-secondary w-100 d-flex flex-column h-100">
+                    <div class="card-header">
+                        자리 제거
+                    </div>
+                    <div class="card-body row align-items-center">
+                        <div class="col">
+                            <select id="remove-dropdown" class="form-select shadow" data-bs-toggle="dropdown">
+                                <% for (let i = 1; i <= rows * columns; i++) { %>
+                                    <option value="<%= i %>"><%= i %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <button id="remove-button" class="btn btn-danger mt-2 mb-2 shadow">제거</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="col-4">
-                <button onClick="window.location.reload()" class="btn btn-success mt-2 mb-2 shadow">초기화</button>
+        
+            <div class="col-12 col-md-4 d-flex p-2">
+                <div class="card card-bg-secondary w-100 d-flex flex-column h-100">
+                    <div class="card-header">
+                        옵션
+                    </div>
+                    <div class="card-body row align-items-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="blackboard-checkbox">
+                            <label class="form-check-label" for="blackboard-checkbox">
+                                칠판(정면)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="col-12 col-md-4 d-flex p-2">
+                <div class="card card-bg-secondary w-100 d-flex flex-column h-100">
+                    <div class="card-header">
+                        초기화
+                    </div>
+                    <div class="card-body justify-content-center">
+                        <div class="justify-content-center">
+                            <button onClick="window.location.reload()" class="btn btn-success mt-2 mb-2 shadow">초기화</button>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
         </div>
+        
     
         <div class="low-container-right align-items-center justify-content-center d-flex mt-3 mb-4 rounded shadow ms-4">
             <button id="start" class="btn btn-primary btn-lg shadow">자리 배치!</button>
@@ -89,15 +126,15 @@
     </div>
 
     <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="remove-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="wait-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
           <div class="toast-header">
-            <img src="/images/logo.png" class="rounded me-2 shadow">
+            <img src="\images\favicon-48x48.png" class="rounded me-2">
             <strong class="me-auto">안내</strong>
-            <small class="text-body-secondary">just now</small>
+            <small class="text-body-secondary">방금 전</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
           </div>
           <div class="toast-body">
-            자리 제거 기능은 아직 준비 중입니다...! 조금만 기다려주세요! 😊
+            이 기능은 아직 준비 중입니다. 조금만 기다려주세요! 😊
           </div>
         </div>
     </div>

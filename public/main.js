@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     rows = searchParams.get('rows');
     columns = searchParams.get('columns');
-    boxList = Array.from({ length: rows*columns }, (_, i) => i + 1);
+    boxList = Array.from({ length: rows * columns }, (_, i) => i + 1);
 
     const mainContainer = document.getElementById('main-container');
     mainContainer.style.position = 'relative';
@@ -41,11 +41,20 @@ document.addEventListener('DOMContentLoaded', () => {
             box.style.left = `${offsetX + col * (boxSizeWidth + margin)}px`;
             box.style.top = `${offsetY + row * (boxSizeHeight + margin)}px`;
 
-            const boxNumber = document.createElement('div');
-            boxNumber.className = 'box-number';
-            boxNumber.textContent = row * columns + col + 1;
-            box.appendChild(boxNumber);
+            const boxNumberContainer = document.createElement('div');
+            boxNumberContainer.className = 'box-number-container';
 
+            const seatNumber = document.createElement('div');
+            seatNumber.className = 'seat-number';
+            seatNumber.textContent = row * columns + col + 1;
+            boxNumberContainer.appendChild(seatNumber);
+
+            const studentNumber = document.createElement('div');
+            studentNumber.className = 'student-number';
+            studentNumber.textContent = '';
+            boxNumberContainer.appendChild(studentNumber);
+
+            box.appendChild(boxNumberContainer);
             mainContainer.appendChild(box);
         }
     }
@@ -84,8 +93,19 @@ document.addEventListener('DOMContentLoaded', () => {
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', onMouseUp);
         });
-    });
+    }); 
 });
+
+// adding blackboard
+document.getElementById('blackboard-checkbox').addEventListener('click', () => {
+    const toastEl = document.getElementById('wait-toast');
+    if (toastEl) {
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    } else {
+        console.error("Unable to find toast");
+    }
+})
 
 
 // removing boxes
@@ -131,12 +151,12 @@ document.getElementById('remove-button').addEventListener('click', () => {
     // });
     
     // show toast
-    const toastEl = document.getElementById('remove-toast');
+    const toastEl = document.getElementById('wait-toast');
     if (toastEl) {
         const toast = new bootstrap.Toast(toastEl);
         toast.show();
     } else {
-        console.error("토스트 요소를 찾을 수 없습니다.");
+        console.error("Unable to find toast");
     }
 });
 
@@ -296,15 +316,14 @@ document.getElementById('start').addEventListener('click', function() {
 
     const dropdownValues = getDropdownValues();
     console.log(dropdownValues);
-    
+
     const { bestX, bestVal } = simulatedAnnealing(boxes.length, boxes, dropdownValues);
     console.log(bestX);
-    
+
     bestX.forEach((value, index) => {
-        const box = document.getElementById(`box-${Math.floor((value) / columns)}-${(value) % columns}`);
-        const boxNumberElement = box.querySelector('.box-number');
-        boxNumberElement.textContent = index + 1;
+        const box = document.getElementById(`box-${Math.floor(value / columns)}-${value % columns}`);
+        const studentNumberElement = box.querySelector('.student-number');
+        studentNumberElement.textContent = index + 1 + '번';
     });
 });
-
 
